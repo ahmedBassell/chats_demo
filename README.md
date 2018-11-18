@@ -21,4 +21,18 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* ...
+
+* API endpoints
+Apps:
+
+CREATE App : POST : localhost:3000/apps?name=app
+Get Apps : GET : localhost:3000/apps
+Get App by token : GET : localhost:3000/apps/aDfKKZav3mGyj2XqFLJp3bge
+
+
+Chats:
+
+Get Chats by token : GET : localhost:3000/apps/aDfKKZav3mGyj2XqFLJp3bge/chats
+Get Chats by Token & Number : GET : localhost:3000/apps/aDfKKZav3mGyj2XqFLJp3bge/chats/1
+
+Delete Chat : DELETE : localhost:3000/apps/aDfKKZav3mGyj2XqFLJp3bge/chats/1

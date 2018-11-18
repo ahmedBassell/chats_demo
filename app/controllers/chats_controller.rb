@@ -34,7 +34,6 @@ class ChatsController < ApplicationController
   private
 
   def chat_params
-    p params
     params.permit(:app_token, :number)
   end
 

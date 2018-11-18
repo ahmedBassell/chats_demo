@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Chats API' do
-  # Initialize the test data
-
   let!(:apps) { create_list(:app, 2) }
   let!(:app_token) { apps.first.token }
   let!(:app_id) { apps.first.id }
