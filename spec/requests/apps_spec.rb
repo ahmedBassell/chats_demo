@@ -4,7 +4,7 @@ RSpec.describe 'Apps API', type: :request do
   # initialize test data
 
   let!(:apps) { create_list(:app, 10) }
-  let(:app_id) { apps.first.id }
+  let(:app_token) { apps.first.token }
 
   # Test suite for GET /apps
   describe 'GET /apps' do
@@ -22,14 +22,14 @@ RSpec.describe 'Apps API', type: :request do
     end
   end
 
-  # Test suite for GET /apps/:id
-  describe 'GET /apps/:id' do
-    before { get "/apps/#{app_id}" }
+  # Test suite for GET /apps/:token
+  describe 'GET /apps/:token' do
+    before { get "/apps/#{app_token}" }
 
     context 'when the record exists' do
       it 'returns the app' do
         expect(json).not_to be_empty
-        expect(json['id']).to eq(app_id)
+        expect(json['token']).to eq(app_token)
       end
 
       it 'returns status code 200' do
@@ -38,7 +38,7 @@ RSpec.describe 'Apps API', type: :request do
     end
 
     context 'when the record does not exist' do
-      let(:app_id) { 100 }
+      let(:app_token) { '100' }
 
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
@@ -81,12 +81,12 @@ RSpec.describe 'Apps API', type: :request do
     end
   end
 
-  # Test suite for PUT /apps/:id
-  describe 'PUT /apps/:id' do
+  # Test suite for PUT /apps/:token
+  describe 'PUT /apps/:token' do
     let(:valid_attributes) { { name: 'Shopping' } }
 
     context 'when the record exists' do
-      before { put "/apps/#{app_id}", params: valid_attributes }
+      before { put "/apps/#{app_token}", params: valid_attributes }
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -98,9 +98,9 @@ RSpec.describe 'Apps API', type: :request do
     end
   end
 
-  # Test suite for DELETE /apps/:id
-  describe 'DELETE /apps/:id' do
-    before { delete "/apps/#{app_id}" }
+  # Test suite for DELETE /apps/:token
+  describe 'DELETE /apps/:token' do
+    before { delete "/apps/#{app_token}" }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

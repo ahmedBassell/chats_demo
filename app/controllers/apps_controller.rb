@@ -4,6 +4,11 @@ class AppsController < ApplicationController
   # GET /apps
   def index
     @apps = App.all
+
+    @apps = @apps.map do |hash|
+      { name: hash[:name], token: hash[:token] }
+    end
+
     json_response(@apps)
   end
 
@@ -11,7 +16,7 @@ class AppsController < ApplicationController
   def create
     # print(app_params)
     @app = App.create!(app_params)
-    json_response(@app, :created)
+    json_response(@app.slice(:token, :name), :created)
   end
 
   # GET /apps/:id
@@ -39,6 +44,6 @@ class AppsController < ApplicationController
   end
 
   def set_app
-    @app = App.find(params[:id])
+    @app = App.find_by!(token: params[:token])
   end
 end

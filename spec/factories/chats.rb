@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :chat do
-    number { Faker::StarWars.character }
-    app_id nil
+    number { Faker::Number.number(2) }
+    app_token { Faker::Lorem.word }
   end
 end
