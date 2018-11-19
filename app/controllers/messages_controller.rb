@@ -14,8 +14,12 @@ class MessagesController < ApplicationController
 
   # POST /apps/:app_token/chats
   def create
-    @message = @chat.messages.create!(:number=> @chat.messages_count, :chat_id => @chat.id, :chat_number => @chat.number, :body => params[:body])
-    @chat.update(:messages_count => @chat.messages_count + 1)
+    Chat.transaction do
+      @chat = Chat.lock(true).find_by!(app_token: params[:app_token], number: params[:chat_number])
+      @message = @chat.messages.create!(:number=> @chat.messages_count, :chat_id => @chat.id, :chat_number => @chat.number, :body => params[:body])
+      @chat.update(:messages_count => @chat.messages_count + 1)
+    end
+
     json_response(@message, :created)
   end
 
