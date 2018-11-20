@@ -14,13 +14,14 @@ class ChatsController < ApplicationController
 
   # POST /apps/:app_token/chats
   def create
-    App.transaction do
-      @app = App.lock(true).find_by!(token: params[:app_token])
-      @chat = @app.chats.create!(:app_token=> chat_params[:app_token], :number=> @app.chats_count, :app_id => @app.id)
-      @app.update(:chats_count => @app.chats_count + 1)
-    end
+    ChatsWorker.perform_async(params[:app_token])
+    # App.transaction do
+    #   @app = App.lock(true).find_by!(token: params[:app_token])
+    #   @chat = @app.chats.create!(:app_token=> chat_params[:app_token], :number=> @app.chats_count, :app_id => @app.id)
+    #   @app.update(:chats_count => @app.chats_count + 1)
+    # end
 
-    json_response(@chat, :created)
+    json_response({ success: true }, :created)
   end
 
   # PUT /apps/:app_token/chats/:id
