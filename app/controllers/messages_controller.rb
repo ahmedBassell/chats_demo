@@ -4,12 +4,22 @@ class MessagesController < ApplicationController
 
   # GET /apps/:app_token/chats/:chat_number/messages
   def index
-    json_response(@chat.messages)
+    @messages = @chat.messages.map do |hash|
+      {
+        number: hash[:number],
+        chat_number: hash[:app_token],
+        body: hash[:body],
+        created_at: hash[:created_at],
+        updated_at: hash[:updated_at]
+      }
+    end
+
+    json_response(@messages)
   end
 
   # GET /apps/:app_token/chats/:chat_number/messages/:number
   def show
-    json_response(@message)
+    json_response(@message.slice(:number, :chat_number, :body, :created_at, :updated_at))
   end
 
   # POST /apps/:app_token/chats

@@ -4,12 +4,21 @@ class ChatsController < ApplicationController
 
   # GET /apps/:app_token/chats
   def index
-    json_response(@app.chats)
+    @chats = @app.chats.map do |hash|
+      {
+        number: hash[:number],
+        app_token: hash[:app_token],
+        created_at: hash[:created_at],
+        updated_at: hash[:updated_at]
+      }
+    end
+
+    json_response(@chats)
   end
 
   # GET /apps/:app_token/chats/:id
   def show
-    json_response(@chat)
+    json_response(@chat.slice(:number, :app_token, :created_at, :updated_at))
   end
 
   # POST /apps/:app_token/chats
