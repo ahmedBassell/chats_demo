@@ -1,18 +1,15 @@
-FROM ruby:latest
-
-RUN apt-get update
-
-RUN curl -sL https://deb.nodesource.com/setup_11.x | bash -
-RUN apt-get install -y nodejs
+FROM ruby:2.3.1
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
 
 RUN gem install bundler
 RUN gem install rails
-RUN gem install mini_magick
 
-
-WORKDIR /usr/src/app/
-
-COPY . /usr/src/app/
-
+RUN mkdir /myapp
+WORKDIR /myapp
+COPY Gemfile /myapp/Gemfile
+COPY Gemfile.lock /myapp/Gemfile.lock
 
 RUN bundle install
+
+COPY . .
+

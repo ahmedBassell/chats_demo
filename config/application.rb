@@ -21,6 +21,17 @@ module Chats
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
+    config.active_job.queue_adapter = :sidekiq
+    
+    sidekiq_config = { url: 'redis://redis:6379/0' }
+
+    Sidekiq.configure_server do |config|
+      config.redis = sidekiq_config
+    end
+
+    Sidekiq.configure_client do |config|
+      config.redis = sidekiq_config
+    end
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
