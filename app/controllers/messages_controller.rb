@@ -14,13 +14,21 @@ class MessagesController < ApplicationController
 
   # POST /apps/:app_token/chats
   def create
+    @newMessageNumber = @chat.messages_count
+
+    # Handle race condition by locking the record for update and prevent other threads from writing
     Chat.transaction do
-      @chat = Chat.lock(true).find_by!(app_token: params[:app_token], number: params[:chat_number])
-      @message = @chat.messages.create!(:number=> @chat.messages_count, :chat_id => @chat.id, :chat_number => @chat.number, :body => params[:body])
       @chat.update(:messages_count => @chat.messages_count + 1)
     end
 
-    json_response(@message, :created)
+    CreateMessagesWorker.perform_async(
+      params[:app_token],
+      params[:chat_number],
+      params[:body],
+      @newMessageNumber
+    )
+
+    json_response({ number: @newMessageNumber }, :created)
   end
 
   # PUT /apps/:app_token/chats/:id

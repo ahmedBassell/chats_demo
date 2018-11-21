@@ -14,14 +14,15 @@ class ChatsController < ApplicationController
 
   # POST /apps/:app_token/chats
   def create
-    ChatsWorker.perform_async(params[:app_token])
-    # App.transaction do
-    #   @app = App.lock(true).find_by!(token: params[:app_token])
-    #   @chat = @app.chats.create!(:app_token=> chat_params[:app_token], :number=> @app.chats_count, :app_id => @app.id)
-    #   @app.update(:chats_count => @app.chats_count + 1)
-    # end
+    @newChatNumber = @app.chats_count
 
-    json_response({ success: true }, :created)
+    # Handle race condition by locking the record for update and prevent other threads from writing
+    App.transaction do
+      @app.update(:chats_count => @app.chats_count + 1)
+    end
+
+    CreateChatsWorker.perform_async(params[:app_token], @newChatNumber)
+    json_response({ number: @newChatNumber }, :created)
   end
 
   # PUT /apps/:app_token/chats/:id
