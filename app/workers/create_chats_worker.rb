@@ -4,9 +4,7 @@ class CreateChatsWorker
 
   def perform(*args)
     # Do something
-    App.transaction do
-      @app = App.lock(true).find_by!(token: args[0])
-      @chat = @app.chats.create!(:app_token=> args[0], :number=> args[1], :app_id => @app.id)
-    end
+    @app = App.lock(true).find_by!(token: args[0])
+    @chat = @app.chats.create!(:app_token=> args[0], :number=> args[1], :app_id => @app.id)
   end
 end
