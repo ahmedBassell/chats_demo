@@ -1,38 +1,47 @@
-# README
+# Getting Started
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* Start services
+```bash
+docker-compose up
+```
 
-Things you may want to cover:
 
-* Ruby version
+* Migration
+```bash
+docker-compose run web rake db:migrate
+```
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
 
 * How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-
-* API endpoints
-Apps:
-
-CREATE App : POST : localhost:3000/apps?name=app
-Get Apps : GET : localhost:3000/apps
-Get App by token : GET : localhost:3000/apps/aDfKKZav3mGyj2XqFLJp3bge
+```bash
+docker-compose run web bundle exec rspec
+```
 
 
-Chats:
+# API endpoints
 
-Get Chats by token : GET : localhost:3000/apps/aDfKKZav3mGyj2XqFLJp3bge/chats
-Get Chats by Token & Number : GET : localhost:3000/apps/aDfKKZav3mGyj2XqFLJp3bge/chats/1
+## Apps:
 
-Delete Chat : DELETE : localhost:3000/apps/aDfKKZav3mGyj2XqFLJp3bge/chats/1
+- Get Apps : GET : `localhost:3000/apps`
+- Create App : POST : `localhost:3000/apps?name=app`
+- Get App by token : GET : `localhost:3000/apps/{{app_token}}`
+- Update App by token: PUT : `localhost:3000/apps/{{app_token}}/?name=new app`
+- Delete App by token : DELETE : `localhost:3000/apps/{{app_token}}`
+
+## Chats:
+
+- Get Chats by token : GET : `localhost:3000/apps/{{app_token}}/chats`
+- Create Chat : POST `localhost:3000/apps/{{app_token}}/chats`
+- Get Chats by Token & Number : GET : `localhost:3000/apps/{{app_token}}/chats/{{chat_number}}`
+- Delete Chat : DELETE : `localhost:3000/apps/{{app_token}}/chats/{{chat_number}}`
+
+## Messages:
+
+- Get Messages of specific Chat : GET : `localhost:3000/apps/{{app_token}}/chats/{{chat_number}}/messages`
+- Create Message in specific Chat : POST : `localhost:3000/apps/{{app_token}}/chats/{{chat_number}}/messages`
+- Get Messages by Number : GET : `localhost:3000/apps/{{app_token}}/chats/{{chat_number}}/messages/{{message_number}}`
+- Delete Messages : DELETE : `localhost:3000/apps/{{app_token}}/chats/{{chat_number}}/messages/{{message_number}}`
+
+
+# Deployed version
+http://3.8.125.186:3000/
