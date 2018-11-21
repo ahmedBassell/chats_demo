@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2018_11_18_185609) do
     t.integer "chats_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_apps_on_token", unique: true
   end
 
   create_table "chats", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -28,6 +29,7 @@ ActiveRecord::Schema.define(version: 2018_11_18_185609) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["app_id"], name: "index_chats_on_app_id"
+    t.index ["app_token", "number"], name: "index_chats_on_app_token_and_number", unique: true
   end
 
   create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -38,6 +40,7 @@ ActiveRecord::Schema.define(version: 2018_11_18_185609) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["chat_id"], name: "index_messages_on_chat_id"
+    t.index ["chat_number", "number"], name: "index_messages_on_chat_number_and_number", unique: true
   end
 
   add_foreign_key "chats", "apps"
