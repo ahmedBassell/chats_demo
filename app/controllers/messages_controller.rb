@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
     @messages = @chat.messages.map do |hash|
       {
         number: hash[:number],
-        chat_number: hash[:app_token],
+        chat_number: hash[:chat_number],
         body: hash[:body],
         created_at: hash[:created_at],
         updated_at: hash[:updated_at]
